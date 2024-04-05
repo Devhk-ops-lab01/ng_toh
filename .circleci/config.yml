@@ -35,6 +35,7 @@ jobs:
           #   CHROME_BIN=/usr/bin/google-chrome 
       - store_test_results:
           path: test-results
+          #path directory is diff with depend on lib  eg. karma //junitReporter{'test-result'}
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -52,6 +53,7 @@ jobs:
           command: |
             DIST_OUTPUT_DIR=$(find dist -maxdepth 1 -type d | awk 'NR==2')
             aws s3 sync ${DIST_OUTPUT_DIR}/browser/ s3://${S3_BUCKET_NAME} --delete
+          #with directly // aws s3 sync dis/toh/browser/ s3://${S3_BUCKET_NAME} --delete
 
 workflows:
   version: 2
@@ -65,3 +67,10 @@ workflows:
             branches:
               only:
                 - master
+      # - build-dev:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
